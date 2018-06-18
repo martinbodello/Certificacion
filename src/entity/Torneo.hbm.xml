@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18/06/2018 11:42:54 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="entity.Torneo" table="torneo" catalog="certificacion" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="fecha" type="date">
+            <column name="fecha" length="10" not-null="true" />
+        </property>
+        <property name="sede" type="string">
+            <column name="sede" length="45" not-null="true" />
+        </property>
+        <set name="inscripcions" table="inscripcion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idTorneo" />
+            </key>
+            <one-to-many class="entity.Inscripcion" />
+        </set>
+    </class>
+</hibernate-mapping>
