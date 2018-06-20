@@ -13,9 +13,11 @@ import entity.Inscripcion;
 import entity.InscripcionId;
 import entity.Torneo;
 import java.util.ArrayList;
+import static java.util.Collections.list;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import net.sf.ehcache.hibernate.HibernateUtil;
@@ -374,20 +376,47 @@ public class inscripcion extends javax.swing.JFrame {
         }
 
         categoriasList.setModel(modelo);
-        categoriasList.setSelectedIndex(2);
+        
+        Object e = aspirantesList.getSelectedValue();
+        Competidor competidor = (Competidor) e;
+        String dni = "" + competidor.getDni();
+        
+        Object o1 = jtCompetencias.getValueAt(jtCompetencias.getSelectedRow(), 1);
+        Disciplina di1 = (Disciplina) o1;
+        String idDis = "" + di1.getId();
+        
+        String sql_cat = "SELECT c.* FROM categoria c JOIN inscripcion i "
+                + "ON c.id = i.idCategoria WHERE dniCompetidor = " + dni
+                + " AND idDisciplina = " + idDis;
+        SQLQuery query_cat = sesion.createSQLQuery(sql_cat);
+        query_cat.addEntity(Categoria.class);
+        List catelegida = query_cat.list();
+        
+
+        ListModel model1 = categoriasList.getModel();
+
+        for (Object o : catelegida){
+            Categoria c  = (Categoria) o;
+            for(int i=0; i < model1.getSize(); i++){
+            Object cat =  model1.getElementAt(i);
+            Categoria c1  = (Categoria) cat;
+            if (c.getId() == c1.getId())
+                categoriasList.setSelectedValue(c, rootPaneCheckingEnabled);
+        }
+        }
         sesion.close();
     }//GEN-LAST:event_jtCompetenciasMouseClicked
 
     private void btnGuadarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuadarActionPerformed
              
-        for (int j = 0; j < jtCompetencias.getModel().getRowCount(); j++) {
-                Boolean checked = (Boolean) jtCompetencias.getValueAt(j, 0);
+        
+                Boolean checked = (Boolean) jtCompetencias.getValueAt(jtCompetencias.getSelectedRow(), 0);
                  
                 if (checked){
                     Object o = categoriasList.getSelectedValue();
                     Categoria c = (Categoria) o;
                     
-                    Object o1 = jtCompetencias.getValueAt(j, 1);                 
+                    Object o1 = jtCompetencias.getValueAt(jtCompetencias.getSelectedRow(), 1);                 
                     Disciplina d = (Disciplina) o1;                    
                     
                     Object o2 = aspirantesList.getSelectedValue();
@@ -410,7 +439,7 @@ public class inscripcion extends javax.swing.JFrame {
  
                     session.getTransaction().commit();
                     session.close();   
-                } 
+               
         }
     }//GEN-LAST:event_btnGuadarActionPerformed
 
