@@ -178,7 +178,7 @@ public class nuevoAspirante extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.setVisible(false);
-        inscripcion i = new inscripcion();
+        inscripcionView i = new inscripcionView();
         i.setVisible(true);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -215,7 +215,7 @@ public class nuevoAspirante extends javax.swing.JFrame {
         session.close();
         
         this.setVisible(false);
-        inscripcion i = new inscripcion();
+        inscripcionView i = new inscripcionView();
         i.setVisible(true);    
     }//GEN-LAST:event_btnAceptarActionPerformed
 
